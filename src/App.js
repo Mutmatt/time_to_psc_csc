@@ -96,9 +96,9 @@ class App extends Component {
           <div className="form-group row">
             <label className="col-sm-12 display-3 text-center">Time to Needle</label>
             <label htmlFor="pscNeedle" value={pscNeedle}>Primary Stroke Center: <strong>{pscNeedle}</strong></label>
-            <input type="range" className="form-control-range" id="pscNeedle" value={pscNeedle} onChange={this.handlePscNeedle}></input>
+            <input type="range" min={0} max={120} className="form-control-range" id="pscNeedle"  value={pscNeedle} onChange={this.handlePscNeedle}></input>
             <label htmlFor="pscNeedle">Comprehensive Stroke Center: <strong>{cscNeedle}</strong></label>
-            <input type="range" className="form-control-range" id="cscNeedle" value={cscNeedle} onChange={this.handleCscNeedle}></input>
+            <input type="range" min={0} max={120} className="form-control-range" id="cscNeedle" value={cscNeedle} onChange={this.handleCscNeedle}></input>
           </div>
 
           <div className="form-group row">
@@ -155,9 +155,9 @@ class App extends Component {
 
           <div className="form-group row">
             <label htmlFor="pscNeedle" value={pscNeedle}>PSC Door in, Door out: <strong>{pscNeedle}</strong></label>
-            <input type="range" className="form-control-range" id="pscNeedle" value={pscNeedle} onChange={this.handlePscNeedle}></input>
+            <input type="range" min={0} max={120} className="form-control-range" id="pscNeedle" value={pscNeedle} onChange={this.handlePscNeedle}></input>
             <label htmlFor="pscNeedle">CSC time to CTA: <strong>{cscNeedle}</strong></label>
-            <input type="range" className="form-control-range" id="cscNeedle" value={cscNeedle} onChange={this.handleCscNeedle}></input>
+            <input type="range" min={0} max={120} className="form-control-range" id="cscNeedle" value={cscNeedle} onChange={this.handleCscNeedle}></input>
           </div>
 
           <div className="form-group row">
