@@ -65,7 +65,7 @@ class App extends Component {
     return (
       <div> 
         <div className="row">
-          <label className="col-12 display-4 text-center">Time to {title}</label>
+          <h2 className="col-12 text-center">Time to {title}</h2>
         </div>
         <form>
           <div className="row">
@@ -92,14 +92,6 @@ class App extends Component {
             </div>
           </div>
 
-          <div className={(ttBetween !== 0 ? ' d-none' : '')}>
-            <div className="row">
-              <div className="col-12 text-center">
-                <h4>Time to Needle</h4>
-              </div>
-            </div>
-          </div>
-
           <div className="form-group">
             <label htmlFor="pscNeedle">{rangeMessage1} <strong>{pscNeedle}</strong></label>
             <input type="range" min={1} max={120} className="form-control-range" id="pscNeedle" name="pscNeedle" value={pscNeedle} onChange={this.handleChange}></input>
@@ -109,7 +101,7 @@ class App extends Component {
 
           <div className="form-group ">
             <div className="row align-items-center">
-              <div className="col-6">
+              <div className="col-6 text-right">
                   <span>Total time to {title} if</span>
               </div>
               <div className="col-6">
@@ -120,7 +112,7 @@ class App extends Component {
           </div>
 
           <div className="form-group">
-            <label className={"display-4 col-12 text-center alert alert-" + (isCpc ? 'danger' : 'dark')}>{this.state.decisionText}</label>
+            <h2 className={"col-12 text-center alert alert-" + (isCpc ? 'danger' : 'dark')}>{this.state.decisionText}</h2>
           </div>
         </form>
       </div>
@@ -130,18 +122,13 @@ class App extends Component {
   render() {    
     let { tab } = this.state;
     return (
-      <div>
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
-          <div className="collapse navbar-collapse">
-            <span className="navbar-brand">Time to Treatment</span>
-            <div className="navbar-nav">
-              <a className={"nav-item nav-link " + (tab === ALTEPLASE ? 'active': '')} name={ALTEPLASE} href="#" onClick={this.handleTabClick}>IV Alteplase</a>
-              <a className={"nav-item nav-link " + (tab === THROMBECTOMY ? 'active': '')} name={THROMBECTOMY} href="#" onClick={this.handleTabClick}>Thrombectomy</a>
-            </div>
-          </div>
+      <div className="mt-1">
+        <nav className="nav nav-tabs">
+          <a className={"nav-item nav-link " + (tab === ALTEPLASE ? 'active': '')} name={ALTEPLASE} href="#" onClick={this.handleTabClick}>IV Alteplase</a>
+          <a className={"nav-item nav-link " + (tab === THROMBECTOMY ? 'active': '')} name={THROMBECTOMY} href="#" onClick={this.handleTabClick}>Thrombectomy</a>
         </nav>
-        {this.renderSection(ALTEPLASE, 'IV Alteplase', 'Primary Stroke Center:', 'Comprehensive Stroke Center:')}
-        {this.renderSection(THROMBECTOMY, 'Arterial Puncture', 'PSC Door in, Door out:', 'CSC time to CTA:')}
+        {this.renderSection(ALTEPLASE, 'IV Alteplase', 'PSC Door-to-Needle:', 'CSC Door-to-Needle:')}
+        {this.renderSection(THROMBECTOMY, 'Arterial Puncture', 'PSC Door-in-Door-out Time:', 'CSC Door-to-Arterial Puncture Time:')}
       </div>
     );
   }
