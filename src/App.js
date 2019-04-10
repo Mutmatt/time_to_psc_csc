@@ -54,8 +54,10 @@ class App extends Component {
     e.preventDefault();
     if (activeTab === ALTEPLASE) {
       this.setState({ ttBetween: 0 });
+      this.triggerHospitalChange('ttBetween', 0);
     } else {
       this.setState({ ttBetween: 30 });
+      this.triggerHospitalChange('ttBetween', 30);
     }
     this.setState({ tab: e.target.name });
   }
