@@ -4,6 +4,8 @@ import './App.css';
 
 const THROMBECTOMY = 'Thrombectomy';
 const ALTEPLASE = 'IV Alteplase';
+const PscText = 'You should go to the Primary Stroke Center';
+const CpcText = 'You should go to the Comprehensive Stroke Center';
 
 class App extends Component {
     constructor(props, context) {
@@ -15,31 +17,18 @@ class App extends Component {
       ttPsc: 15,
       ttCsc: 45,
       tab: ALTEPLASE,
-      ttBetween: 0//if tab === ALTEPLASE
+      ttBetween: 0,//if tab === ALTEPLASE,
+      cpc: false,
+      decisionText: PscText
     };
   }
 
-  handlePscNeedle = (html) => {
-    this.setState({ pscNeedle: html.target.value });
+  handleChange = (html) => {
+    this.setState({ [html.target.name]: html.target.value });
+    this.triggerHospitalChange();
   };
 
-  handleCscNeedle = (html) => {
-    this.setState({ cscNeedle: html.target.value });
-  };
-
-  handleTtPsc = (html) => {
-    this.setState({ ttPsc: html.target.value });
-  };
-
-  handleTtCsc = (html) => {
-    this.setState({ ttCsc: html.target.value });
-  };
-
-  handleBetween = (html) => {
-    this.setState({ ttBetween: html.target.value });
-  }
-
-  makeHospitalChoice = () => {
+  triggerHospitalChange = () => {
     const tc = parseInt(this.state.ttCsc, 10);
     const tp = parseInt(this.state.ttPsc, 10);
     const tbetween = parseInt(this.state.ttBetween, 10);
@@ -48,9 +37,11 @@ class App extends Component {
     const np = parseInt(this.state.pscNeedle, 10);
     
     if ((tc + nc) > (tp + np + tbetween)) {
-      return 'You should go to the Primary Stroke Center';
+      this.setState({ isCpc: false });
+      this.setState({ decisionText:  PscText });
     } else {
-      return 'You should go to the Comprehensive Stroke Center';
+      this.setState({ isCpc: true });
+      this.setState({ decisionText: CpcText });
     }
   }
 
@@ -65,8 +56,8 @@ class App extends Component {
     this.setState({ tab: e.target.name });
   }
 
-  renderSection(name, rangeMessage1, rangeMessage2) {
-    let { tab, cscNeedle, pscNeedle, ttPsc, ttCsc, ttBetween } = this.state;
+  renderSection(name, title, rangeMessage1, rangeMessage2) {
+    let { tab, cscNeedle, pscNeedle, ttPsc, ttCsc, ttBetween, isCpc } = this.state;
     if (tab !== name) {
       return;
     }
@@ -74,51 +65,62 @@ class App extends Component {
     return (
       <div> 
         <div className="row">
-          <label className="col-sm-12 display-2 text-center">Time to {tab}</label>
+          <label className="col-12 display-4 text-center">Time to {title}</label>
         </div>
         <form>
           <div className="row">
-            <div className={"col-sm-" + (ttBetween === 0 ? '6' : '4')}>
+            <div className={"col-" + (ttBetween === 0 ? '6' : '4')}>
               <div className="form-group">
                 <label htmlFor="time-to-psc"><br/>Time to Primary Stroke Center</label>
-                <input className="form-control" type="number" name="time-to-psc" id="time-to-psc" value={ttPsc} onChange={this.handleTtPsc}/>
+                <input className="form-control" type="number" name="ttPsc" id="time-to-psc" value={ttPsc} onChange={this.handleChange}/>
               </div>
             </div>
             
-            <div className={"col-sm-" + (ttBetween === 0 ? '6' : '4')}>
+            <div className={"col-" + (ttBetween === 0 ? '6' : '4')}>
               <div className="form-group">
                 <label htmlFor="time-to-csc"><br/>Time to Comprehensive Stroke Center</label>
-                <input className="form-control" type="number" name="time-to-csc" id="time-to-csc" value={ttCsc} onChange={this.handleTtCsc}/>
+                <input className="form-control" type="number" name="ttCsc" id="time-to-csc" value={ttCsc} onChange={this.handleChange}/>
               </div>
             </div>
           
 
-            <div className={"col-sm-" + (ttBetween === 0 ? ' d-none' : '4')}>
+            <div className={"col-" + (ttBetween === 0 ? ' d-none' : '4')}>
               <div className="form-group">
                 <label htmlFor="time-between">Time from Primary Stroke Center to Comprehensive Stroke Center</label>
-                <input className="form-control" type="number" name="time-between" id="time-between" value={ttBetween} onChange={this.handleBetween}/>
+                <input className="form-control" type="number" name="ttBetween" id="time-between" value={ttBetween} onChange={this.handleChange}/>
               </div>
             </div>
           </div>
 
-          <div className="form-group row">
-            <label className={"col-sm-12 display-3 text-center " + (ttBetween !== 0 ? 'd-none' : '')}>Time to Needle</label>
-            <label htmlFor="pscNeedle">{rangeMessage1} <strong>{pscNeedle}</strong></label>
-            <input type="range" min={1} max={120} className="form-control-range" id="pscNeedle" value={pscNeedle} onChange={this.handlePscNeedle}></input>
-            <label htmlFor="cscNeedle">{rangeMessage2} <strong>{cscNeedle}</strong></label>
-            <input type="range" min={1} max={120} className="form-control-range" id="cscNeedle" value={cscNeedle} onChange={this.handleCscNeedle}></input>
-          </div>
-
-          <div className="form-group row">
-            <label className="display-4 col-sm-8">Total time to {tab} if</label>
-            <div className="form-group col-sm-4">
-              <label>PSC First: <strong>{parseInt(this.state.pscNeedle, 10) + parseInt(this.state.ttPsc, 10) + parseInt(this.state.ttBetween, 10)}</strong></label><br/>
-              <label>CSC First: <strong>{parseInt(this.state.cscNeedle, 10) + parseInt(this.state.ttCsc, 10)}</strong></label>
+          <div className={(ttBetween !== 0 ? ' d-none' : '')}>
+            <div className="row">
+              <div className="col-12 text-center">
+                <h4>Time to Needle</h4>
+              </div>
             </div>
           </div>
 
-          <div className="form-group row">
-            <label className="display-3 text-center alert alert-dark">{this.makeHospitalChoice()}</label>
+          <div className="form-group">
+            <label htmlFor="pscNeedle">{rangeMessage1} <strong>{pscNeedle}</strong></label>
+            <input type="range" min={1} max={120} className="form-control-range" id="pscNeedle" name="pscNeedle" value={pscNeedle} onChange={this.handleChange}></input>
+            <label htmlFor="cscNeedle">{rangeMessage2} <strong>{cscNeedle}</strong></label>
+            <input type="range" min={1} max={120} className="form-control-range" id="cscNeedle" name="cscNeedle" value={cscNeedle} onChange={this.handleChange}></input>
+          </div>
+
+          <div className="form-group ">
+            <div className="row align-items-center">
+              <div className="col-6">
+                  <span>Total time to {tab} if</span>
+              </div>
+              <div className="col-6">
+                <span>PSC First: <strong>{parseInt(this.state.pscNeedle, 10) + parseInt(this.state.ttPsc, 10) + parseInt(this.state.ttBetween, 10)}</strong></span><br/>
+                <span>CSC First: <strong>{parseInt(this.state.cscNeedle, 10) + parseInt(this.state.ttCsc, 10)}</strong></span>
+              </div>
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label className={"display-4 col-12 text-center alert alert-" + (isCpc ? 'danger' : 'dark')}>{this.state.decisionText}</label>
           </div>
         </form>
       </div>
@@ -138,8 +140,8 @@ class App extends Component {
             </div>
           </div>
         </nav>
-        {this.renderSection(ALTEPLASE, 'Primary Stroke Center:', 'Comprehensive Stroke Center:')}
-        {this.renderSection(THROMBECTOMY, 'PSC Door in, Door out:', 'CSC time to CTA:')}
+        {this.renderSection(ALTEPLASE, 'Arterial Puncture', 'Primary Stroke Center:', 'Comprehensive Stroke Center:')}
+        {this.renderSection(THROMBECTOMY, 'Thrombectomy', 'PSC Door in, Door out:', 'CSC time to CTA:')}
       </div>
     );
   }
