@@ -110,7 +110,7 @@ class App extends Component {
           <div className="form-group ">
             <div className="row align-items-center">
               <div className="col-6">
-                  <span>Total time to {tab} if</span>
+                  <span>Total time to {title} if</span>
               </div>
               <div className="col-6">
                 <span>PSC First: <strong>{parseInt(this.state.pscNeedle, 10) + parseInt(this.state.ttPsc, 10) + parseInt(this.state.ttBetween, 10)}</strong></span><br/>
@@ -140,8 +140,8 @@ class App extends Component {
             </div>
           </div>
         </nav>
-        {this.renderSection(ALTEPLASE, 'Arterial Puncture', 'Primary Stroke Center:', 'Comprehensive Stroke Center:')}
-        {this.renderSection(THROMBECTOMY, 'Thrombectomy', 'PSC Door in, Door out:', 'CSC time to CTA:')}
+        {this.renderSection(ALTEPLASE, 'IV Alteplase', 'Primary Stroke Center:', 'Comprehensive Stroke Center:')}
+        {this.renderSection(THROMBECTOMY, 'Arterial Puncture', 'PSC Door in, Door out:', 'CSC time to CTA:')}
       </div>
     );
   }
