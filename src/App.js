@@ -5,7 +5,7 @@ import './App.css';
 const THROMBECTOMY = 'Thrombectomy';
 const ALTEPLASE = 'IV Alteplase';
 const PscText = 'You should go to the Primary Stroke Center';
-const CpcText = 'You should go to the Comprehensive Stroke Center';
+const CscText = 'You should go to the Comprehensive Stroke Center';
 
 class App extends Component {
     constructor(props, context) {
@@ -25,23 +25,27 @@ class App extends Component {
 
   handleChange = (html) => {
     this.setState({ [html.target.name]: html.target.value });
-    this.triggerHospitalChange();
+    
+    this.triggerHospitalChange(html.target.name, html.target.value);
   };
 
-  triggerHospitalChange = () => {
-    const tc = parseInt(this.state.ttCsc, 10);
-    const tp = parseInt(this.state.ttPsc, 10);
-    const tbetween = parseInt(this.state.ttBetween, 10);
+  triggerHospitalChange = (changedState, value) => {
+    this.state[changedState] = value;
+    let { ttCsc, ttPsc, ttBetween, cscNeedle, pscNeedle } = this.state;
 
-    const nc = parseInt(this.state.cscNeedle, 10);
-    const np = parseInt(this.state.pscNeedle, 10);
+    const tc = parseInt(ttCsc, 10);
+    const tp = parseInt(ttPsc, 10);
+    const tbetween = parseInt(ttBetween, 10);
+
+    const nc = parseInt(cscNeedle, 10);
+    const np = parseInt(pscNeedle, 10);
     
     if ((tc + nc) > (tp + np + tbetween)) {
-      this.setState({ isCpc: false });
+      this.setState({ isCsc: false });
       this.setState({ decisionText:  PscText });
     } else {
-      this.setState({ isCpc: true });
-      this.setState({ decisionText: CpcText });
+      this.setState({ isCsc: true });
+      this.setState({ decisionText: CscText });
     }
   }
 
@@ -57,7 +61,7 @@ class App extends Component {
   }
 
   renderSection(name, title, rangeMessage1, rangeMessage2) {
-    let { tab, cscNeedle, pscNeedle, ttPsc, ttCsc, ttBetween, isCpc } = this.state;
+    let { tab, cscNeedle, pscNeedle, ttPsc, ttCsc, ttBetween, isCsc } = this.state;
     if (tab !== name) {
       return;
     }
@@ -112,7 +116,7 @@ class App extends Component {
           </div>
 
           <div className="form-group">
-            <h2 className={"col-12 text-center alert alert-" + (isCpc ? 'danger' : 'dark')}>{this.state.decisionText}</h2>
+            <h2 className={"col-12 text-center alert alert-" + (isCsc ? 'danger' : 'dark')}>{this.state.decisionText}</h2>
           </div>
         </form>
       </div>
@@ -127,7 +131,7 @@ class App extends Component {
           <a className={"nav-item nav-link " + (tab === ALTEPLASE ? 'active': '')} name={ALTEPLASE} href="#" onClick={this.handleTabClick}>IV Alteplase</a>
           <a className={"nav-item nav-link " + (tab === THROMBECTOMY ? 'active': '')} name={THROMBECTOMY} href="#" onClick={this.handleTabClick}>Thrombectomy</a>
         </nav>
-        {this.renderSection(ALTEPLASE, 'IV Alteplase', 'PSC Door-to-Needle:', 'CSC Door-to-Needle:')}
+        {this.renderSection(ALTEPLASE, 'IV Alteplase', 'PSC Door-to-Needle Time:', 'CSC Door-to-Needle Time:')}
         {this.renderSection(THROMBECTOMY, 'Arterial Puncture', 'PSC Door-in-Door-out Time:', 'CSC Door-to-Arterial Puncture Time:')}
       </div>
     );
