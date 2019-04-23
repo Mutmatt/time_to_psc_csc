@@ -5,6 +5,8 @@
   "homepage": "http://mutmatt.github.io/time_to_psc_csc",
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
+    "google-maps": "^3.3.0",
+    "lodash": "^4.17.11",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-rangeslider": "^2.2.0",

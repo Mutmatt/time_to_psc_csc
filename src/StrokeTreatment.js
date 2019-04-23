@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { THROMBECTOMY, ALTEPLASE } from './App';
+import { ALTEPLASE } from './App';
+import _ from 'lodash';
 
 const PscText = 'You should go to the Primary Stroke Center';
 const CscText = 'You should go to the Comprehensive Stroke Center';
@@ -7,31 +8,70 @@ const CscText = 'You should go to the Comprehensive Stroke Center';
 class StrokeTreatment extends Component {
     constructor(props) {
         super(props);
+        var defaultBetween = 0, 
+            defaultTtPsc = 15,
+            defaultTtCsc = 45,
+            defaultText = PscText,
+            defaultIsCsc = false;
 
-        this.state = {
+        if (props.timeBetween) {
+            defaultBetween = props.timeBetween;
+        } else if( props.type !== ALTEPLASE) {
+            defaultBetween = 30;
+        }
+        if (props.timeToPsc) {
+            defaultTtPsc = props.timeToPsc;
+        }
+        if (props.timeToCsc) {
+            defaultTtCsc = props.timeToCsc;
+        }
+
+
+        var defaultState = {
             cscNeedle: 30,
             pscNeedle: 30,
-            ttPsc: 15,
-            ttCsc: 45,
-            ttBetween: props.type === ALTEPLASE ? 0 : 30,
+            ttPsc: defaultTtPsc,
+            ttCsc: defaultTtCsc,
+            ttBetween: defaultBetween,
             cpc: false,
-            isCsc: true,
-            decisionText: PscText
+            isCsc: defaultIsCsc,
+            decisionText: defaultText
         };
 
-        this.triggerHospitalChange('ttBetween', props.type === ALTEPLASE ? 0 : 30);//force update
+        if (this.isCsc(defaultState)) {
+            console.log("Tested isCsc and found true");
+            defaultState.decisionText = CscText;
+            defaultState.isCsc = true;
+        }
+
+        this.state = defaultState;
+
+        this.renderClosestName = this.renderClosestName.bind(this);
+        this.triggerHospitalChange(['decisionText', 'isCsc'], [defaultState.decisionText, defaultState.isCsc]);//force update
     }
 
     handleChange = (html) => {
         this.setState({ [html.target.name]: html.target.value });
         
-        this.triggerHospitalChange(html.target.name, html.target.value);
+        this.triggerHospitalChange([html.target.name], [html.target.value]);
       };
 
     triggerHospitalChange = (changedState, value) => {
-        this.state[changedState] = value;
-        let { ttCsc, ttPsc, ttBetween, cscNeedle, pscNeedle } = this.state;
+        _.forEach(changedState, (thisState, index) => {
+            this.state[thisState] = value[index];
+        })
+        
+        if (this.isCsc()) {
+            this.setState({ isCsc: true });
+            this.setState({ decisionText: CscText });
+        } else {
+            this.setState({ isCsc: false });
+            this.setState({ decisionText:  PscText });
+        }
+    }
 
+    isCsc = (state) => {
+        let { ttCsc, ttPsc, ttBetween, cscNeedle, pscNeedle } = state || this.state;
         const tc = parseInt(ttCsc, 10);
         const tp = parseInt(ttPsc, 10);
         const tBetween = parseInt(ttBetween, 10);
@@ -40,18 +80,25 @@ class StrokeTreatment extends Component {
         const np = parseInt(pscNeedle, 10);
         
         if ((tc + nc) > (tp + np + tBetween)) {
-            this.setState({ isCsc: false });
-            this.setState({ decisionText:  PscText });
+            return false;
         } else {
-            this.setState({ isCsc: true });
-            this.setState({ decisionText: CscText });
+            return true;
         }
     }
 
+    renderClosestName(label, name) {
+        if (!name) {
+            return;
+        }
+        return (
+            <label>Closest {label}:<br/> {name}</label>
+        );
+    }
+
     render() {
-        const { title, rangeMessages } = this.props;
+        const { title, rangeMessages, cscName, pscName, type } = this.props;
         let { cscNeedle, pscNeedle, ttPsc, ttCsc, ttBetween, isCsc, decisionText } = this.state;
-        
+
         return (
             <div> 
                 <div className="row mt-3 mb-3">
@@ -59,26 +106,28 @@ class StrokeTreatment extends Component {
                 </div>
                 <form>
                 <div className="row align-items-center">
-                        <label className={"col-" + (ttBetween === 0 ? '6' : '4')} htmlFor="time-to-psc">Time to Primary Stroke Center</label>
-                        <label className={"col-" + (ttBetween === 0 ? '6' : '4')} htmlFor="time-to-csc">Time to Comprehensive Stroke Center</label>
-                        <label className={"col-" + (ttBetween === 0 ? ' d-none' : '4')} htmlFor="time-between">Time from Primary Stroke Center to Comprehensive Stroke Center</label>
+                        <label className={"col-" + (type === ALTEPLASE ? '6' : '4')} htmlFor="time-to-psc">Time to Primary Stroke Center</label>
+                        <label className={"col-" + (type === ALTEPLASE ? '6' : '4')} htmlFor="time-to-csc">Time to Comprehensive Stroke Center</label>
+                        <label className={"col-" + (type === ALTEPLASE ? ' d-none' : '4')} htmlFor="time-between">Time from Primary Stroke Center to Comprehensive Stroke Center</label>
                     </div>
         
                     <div className="row">
-                    <div className={"col-" + (ttBetween === 0 ? '6' : '4')}>
+                    <div className={"col-" + (type === ALTEPLASE ? '6' : '4')}>
                         <div className="form-group">
-                        <input className="form-control" type="number" name="ttPsc" id="time-to-psc" value={ttPsc} onChange={this.handleChange}/>
+                          {this.renderClosestName('PSC', pscName)}
+                          <input className="form-control" type="number" name="ttPsc" id="time-to-psc" value={ttPsc} onChange={this.handleChange}/>
                         </div>
                     </div>
                     
-                    <div className={"col-" + (ttBetween === 0 ? '6' : '4')}>
+                    <div className={"col-" + (type === ALTEPLASE ? '6' : '4')}>
                         <div className="form-group">
-                        <input className="form-control" type="number" name="ttCsc" id="time-to-csc" value={ttCsc} onChange={this.handleChange}/>
+                        {this.renderClosestName('CSC', cscName)}
+                          <input className="form-control" type="number" name="ttCsc" id="time-to-csc" value={ttCsc} onChange={this.handleChange}/>
                         </div>
                     </div>
                     
         
-                    <div className={"col-" + (ttBetween === 0 ? ' d-none' : '4')}>
+                    <div className={"col-" + (type === ALTEPLASE ? ' d-none' : '4')}>
                         <div className="form-group">
                         <input className="form-control" type="number" name="ttBetween" id="time-between" value={ttBetween} onChange={this.handleChange}/>
                         </div>
