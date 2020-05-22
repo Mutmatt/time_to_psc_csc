@@ -1,141 +1,414 @@
 <!-- pull date 05/22/2020 -->
+<!doctype html>
 <html lang="en">
-  <body onload="checkWidth()" bgcolor="#FFFFFF" data-gr-c-s-loaded="true">
-    <div id="body">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- JAVASCRIPT --> 
+<script type="text/javascript" src="/macros/js/jquery.min.js"></script>
+<script type="text/javascript" src="/macros/js/bootstrap.js"></script>
+<script type="text/javascript" src="/macros/js/banner.js"></script>
+<script type="text/javascript">
+var $window = $(window);
+
+function checkWidth() {
+    if ($window.width() < 600) {
+	var el1 = document.getElementById('sidebar_left');
+	var el2 = document.getElementById('sidebar_right');
+	if (el1 && el2) {
+  	while (el2.firstChild) el1.appendChild(el2.firstChild);
+	}
+
+	// Remove el2 if required
+	el2.parentNode.removeChild(el2);
+    };
+}
+
+</script>
+
+<!-- CSS STYLES --->
+<link rel="stylesheet" type="text/css" href="/macros/css/bootstrap/bootstrap.css" />
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css" rel="stylesheet">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/macros/responsive/styles.css"> 
+<link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+
+
+</head>
+<body onLoad="checkWidth()">
+<div id="skiptocontent"><a href="#body" class="skip">Skip to Content</a></div>
+<script>
+   $( document ).ready(function() {
+        $(".skip").click(function(event){   
+            var skipTo="#"+this.href.split('#')[1];
+            $(skipTo).attr('tabindex', -1).on('blur focusout', function () {
+                $(this).removeAttr('tabindex');    
+            }).focus();
+        });
+    });
+</script>
+<!-- MDH CURRENT BANNER CONTENT --->
+<!-- Start Banner Include -->
+
+<!-- Specify MDH main phone numbers for Google Searches; added 3-14-15 --> 
+<script type="application/ld+json">
+{ "@context" : "http://schema.org",
+  "@type" : "Organization",
+  "url" : "http://www.health.state.mn.us",
+  "contactPoint" : [
+    { "@type" : "ContactPoint",
+      "telephone" : "+1-888-345-0823",
+      "contactType" : "customer service",
+      "contactOption" : "TollFree",
+      "areaServed" : "US"
+    } , {
+      "@type" : "ContactPoint",
+      "telephone" : "+1-651-201-5000",
+      "contactType" : "customer service"
+    } ] }
+</script>
+
+<!-- MDH BANNER HTML --------------------------------------------------------------------------->
+<div id="mdhHeaderDiv">
+  <header class="banner"> <a href="/index.html"><img class="bannerImg no_print" src="/images/logo-reverse.png" alt="Department of Health Logo"/></a>
+    <img class="bannerImg-small hidden" src="/images/portal-logo-screen_tcm1077-226393.png" alt="Minnesota logo" /><img src="/images/logo_print.png" alt="MDH Logo" width="250" height="37" class="printOnly" />
+	
+	  
+    <div class="title hidden" tabindex=0>Minnesota Department of Health</div>
+  
+    <div id="navigation">
+      <ul id="navbar" class="clearfix">
+        <li><a href="/index.html" id="home">HOME</a></li>
+        <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" id="topic">TOPICS <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="/data/index.html">Data, Statistics and Legislation</a></li>
+            <li><a href="/diseases/index.html">Diseases and Conditions</a></li>
+            <li><a href="/facilities/index.html">Health Care Facilities, Providers, and Insurance</a></li>
+            <li><a href="/communities/index.html">Healthy Communities, Environment and Workplaces</a></li>
+            <li><a href="/people/index.html">Individual and Family Health</a></li>
+          </ul>
+        </li>
+        <li><a href="/about/index.html" id="about">ABOUT US</a></li>
+      </ul>
+
+	<div id="searchform">
+            <form id="cse-search-box" name="seek" action="https://mn.gov/mdh/search/" onsubmit="return validateSearch(this);">
+      <div id="searchbox">
+        <label style="position: absolute; left:-1100px" for="q">search input field</label>
+        <button type="submit" class="searchbutton" alt="search">
+ Search
+ </button>
+        <input type="text" name="query" placeholder="Search" id="q" size="30" class="searchtext" value="" onfocus="return clearSearchDefault;" 
+         />
+			   
+        
+      </div>
+      </form>
+    </div>         
+  </div>	
+  </header>
+	
+	</div>
+	
+	
+	
+<!--------------------------------------------------------------------------------------------->
+
+<!-- End Banner Include -->
+
+<!-- Begin Main Content -->
+
+<TITLE>Minnesota Stroke System Designated Hospitals - Minnesota Department of Health</TITLE>
+<!-- Dublin Core Meta Tags generated by TagGen - The Meta Tag Management System -->
+<meta name="DC.Title" content="Minnesota Stroke System Designated Hospitals - Minnesota Department of Health">
+<meta name="DC.Subject" scheme="LIV-MN" content="comprehensive stroke centerse">
+<meta name="DC.Subject" scheme="LIV-MN" content="primary stroke centers">
+<meta name="DC.Subject" scheme="LIV-MN" content="acute stroke ready hospitals">
+<meta name="DC.Description" content="This page includes a list and map of Minnesota Stroke System designated hospitals.">
+<meta name="DC.Creator.PersonalName" scheme="AACR2" content="Cardiovascular Health Unit">
+<meta name="DC.Date.Created" scheme="ISO 8601" content="2018-09-20">
+<meta name="DC.Language" scheme="ISO639-1" content="en">
+<LINK REL=SCHEMA.dc HREF="http://purl.org/metadata/dublin_core_elements">
+<!-- End Dublin Core - Modify This Block -->
+</HEAD>
+<BODY bgcolor="#FFFFFF">
+
+
+  <link rel="stylesheet" href="/macros/responsive/styles.css">
+
+</head>
+<body>
+
+
+<!-- Begin Main Content -->
+
+<div id="container">
+	<div id="content" class="clearfix">
+		<div id="sidebar_left">
+
+			
+<H2>Stroke Program</H2>
+    <ul>
+      <li><a href="/diseases/cardiovascular/index.html">Cardiovascular Health Home</a></li>
+      <li><a href="/diseases/cardiovascular/stroke/index.html">Stroke Program Home</a></li>
+      <li><a href="/diseases/cardiovascular/stroke/system.html">Minnesota Stroke System</a></li>
+      <li><a href="/diseases/cardiovascular/stroke/registry.html">Minnesota Stroke Registry</a></li>
+      <li><a href="/diseases/cardiovascular/stroke/ems.html">Emergency Medical Services and Stroke</a></li>
+      <li><a href="/diseases/cardiovascular/stroke/transitions.html">Transitions of Care</a></li>
+      <li><a href="/diseases/cardiovascular/stroke/everysecondcounts.html">Every Second Counts</a></li>
+      <li><a href="/diseases/cardiovascular/stroke/resources.html">Resources</a></li>
+      <li><a href="/diseases/cardiovascular/stroke/education.html">Education</a></li>
+      <li><a href="/diseases/cardiovascular/stroke/staff.html">Contact Us</a></li>
+    </ul>
+    <p>&nbsp;</p>
+
+		</div>
+        <!---- for mobile menu. Do not edit ----> 
+<input type="checkbox" id="nav-trigger" class="nav-trigger">
+<label for="nav-trigger"></label>
+<div class="site-wrap">
+		<div id="body">
   
 
-      <h1>Minnesota Stroke System Designated Hospitals </h1>
-            <p>(116 hospitals - Updated 3/01/2020)</p>
-            <p><a href="https://www.google.com/maps/d/u/0/viewer?mid=16llc7z5JmGIpyitiD1Rwlj2EHO-ICVLE&amp;ll=44.35535936040851%2C-91.78517428373243&amp;z=7" target="new">Map of designated hospitals</a></p>
-            <h2>Comprehensive Stroke Centers (12)</h2>
-            <ol>
-              <li>Abbott Northwestern Hospital – Minneapolis</li>
-              <li>Essentia Hospital – Fargo</li>
-              <li>Fairview Southdale Hospital – Edina</li>
-              <li>Hennepin Health Care – HCMC – Minneapolis</li>
-              <li>M Health – University of Minnesota Medical Center – Minneapolis</li>
-              <li>Mayo Clinic Hospital – Rochester, Saint  Mary’s Campus – Rochester</li>
-              <li>North Memorial Health Hospital  – Robbinsdale</li>
-              <li>Park Nicollet Methodist Hospital – St. Louis Park</li>
-              <li>Regions Hospital – St. Paul</li>
-              <li>Sanford  Medical Center Fargo – Fargo</li>
-              <li>St.  Cloud Hospital – St. Cloud</li>
-              <li>United Hospital – St. Paul</li>
-            </ol>
-            <h2>Primary Stroke Centers (12)</h2>
-            <ol>
-              <li>Altru Health  System – Grand Forks, ND</li>
-              <li>Essentia Health St. Joseph's Medical Center –  Brainerd</li>
-              <li>Essentia Health St. Mary's Medical Center – Duluth*</li>
-              <li>Gundersen Health  System- La Crosse – La Crosse, WI</li>
-              <li>Mayo Clinic Health System Franciscan Healthcare  – La Crosse, WI</li>
-              <li>Mayo Clinic Health System in Mankato – Mankato</li>
-              <li>Mercy Hospital – Coon Rapids</li>
-              <li>Sanford USD Medical Center – Sioux Falls,  SD</li>
-              <li>St. John's Hospital – Maplewood</li>
-              <li>St. Joseph's Hospital – St. Paul</li>
-              <li>St. Luke's Hospital – Duluth</li>
-              <li>Unity Hospital – Fridley</li>
-          </ol>
-         <p>*Certified by The Joint Commission as a Thrombectomy-Capable Stroke (TSC) Center. </p>
-            <h2>Acute Stroke Ready Hospitals (92)</h2>
-            <ol>
-              <li>Alomere Health - Alexandria</li>
-              <li>Appleton Area Health Services – Appleton</li>
-              <li>Avera Marshall Regional Medical Center – Marshall</li>
-              <li>Buffalo Hospital – Buffalo</li>
-              <li>Cambridge Medical Center – Cambridge</li>
-              <li>Carris Health Redwood–  Redwood Falls</li>
-              <li>Carris Health Rice  Memorial Hospital – Willmar<strong> </strong></li>
-              <li>CentraCare Health- Long Prairie – Long Prairie</li>
-              <li>CentraCare Health-Melrose – Melrose</li>
-              <li>CentraCare Health-Monticello – Monticello</li>
-              <li>CentraCare Health- Paynesville – Paynesville</li>
-              <li>CentraCare Health- Sauk Centre – Sauk Centre</li>
-              <li>CHI St. Gabriel's Health – Little Falls</li>
-              <li>Community Memorial Hospital  – Cloquet</li>
-              <li>Cook Hospital – Cook</li>
-              <li>Cuyuna Regional Medical Center – Crosby</li>
-              <li>District One Hospital – Faribault</li>
-              <li>Essentia Health Ada – Ada</li>
-              <li>Essentia Health Deer River  – Deer River</li>
-              <li>Essentia Health Fosston – Fosston</li>
-              <li>Essentia Health Holy Trinity Hospital  – Graceville</li>
-              <li>Essentia Health Northern Pines – Aurora</li>
-              <li>Essentia Health Sandstone – Sandstone</li>
-              <li>Essentia Health St. Mary's Medical Center – Detroit  Lakes</li>
-              <li>Essentia Health Virginia  – Virginia, MN</li>
-              <li>Fairview Lakes Regional Medical Center – Wyoming</li>
-              <li>Fairview Northland Medical Center – Princeton</li>
-              <li>Fairview Range Medical Center – Hibbing</li>
-              <li>Fairview Ridges Hospital – Burnsville</li>
-              <li>FirstLight Health System – Mora </li>
-              <li>Glacial Ridge Health System – Glenwood</li>
-              <li>Glencoe Regional Health Services – Glencoe</li>
-              <li>Grand Itasca Clinic &amp; Hospital – Grand  Rapids</li>
-              <li>Granite Falls Municipal Hospital – Granite Falls</li>
-              <li>Hutchinson Health – Hutchinson</li>
-              <li>Lake Region Healthcare – Fergus Falls</li>
-              <li>Lakeview Hospital – Stillwater</li>
-              <li>Lake View Hospital – Two  Harbors</li>
-              <li>Lakewood Health System – Staples</li>
-              <li>LifeCare Medical Center – Roseau</li>
-              <li>Madelia Community Hospital – Madelia</li>
-              <li>Mahnomen Health Center – Mahnomen</li>
-              <li>Maple Grove Hospital – Maple Grove</li>
-              <li>Mayo Clinic Health System –  Albert Lea</li>
-              <li>Mayo Clinic Health System –  Austin</li>
-              <li>Mayo Clinic Health System –  Cannon Falls</li>
-              <li>Mayo Clinic Health System – Fairmont </li>
-              <li>Mayo Clinic Health System –  Lake City</li>
-              <li>Mayo Clinic Health System – New Prague </li>
-              <li>Mayo Clinic Health System –  Red Wing</li>
-              <li>Mayo Clinic Health System – St. James</li>
-              <li>Mayo Clinic Health System – Waseca </li>
-              <li>Meeker Memorial Hospital – Litchfield</li>
-              <li>Mercy Hospital – Moose Lake</li>
-              <li>Mille Lacs Health System – Onamia</li>
-              <li>Murray County Medical Center – Slayton</li>
-              <li>New Ulm Medical Center – New Ulm</li>
-              <li>Northfield Hospital – Northfield </li>
-              <li>Ortonville Area Health Services – Ortonville</li>
-              <li>Owatonna Hospital - Owatonna</li>
-              <li>Perham Health – Perham</li>
-              <li>Pipestone County Medical Center – Pipestone</li>
-              <li>Regina Hospital – Hastings</li>
-              <li>RC Hospital and Clinics – Olivia</li>
-              <li>Ridgeview Le Sueur Medical Center  – Le Sueur</li>
-              <li>Ridgeview Medical Center – Waconia</li>
-              <li>Ridgeview Sibley Medical Center – Arlington </li>
-              <li>River Falls Area Hospital – River Falls</li>
-              <li>River's Edge Hospital &amp; Clinic – St. Peter</li>
-              <li>RiverView Health – Crookston</li>
-              <li>Riverwood Healthcare Center – Aitkin</li>
-              <li>Sanford Bagley Medical Center – Bagley </li>
-              <li>Sanford Bemidji Medical Center – Bemidji </li>
-              <li>Sanford Canby Medical Center – Canby</li>
-              <li>Sanford Jackson Medical Center – Jackson</li>
-              <li>Sanford Luverne Medical Center – Luverne</li>
-              <li>Sanford Medical Center Thief River  Falls – Thief River</li>
-              <li>Sanford Medical Center Wheaton – Wheaton</li>
-              <li>Sanford Tracy Medical Center – Tracy</li>
-              <li>Sanford Westbrook Medical Center – Westbrook</li>
-              <li>Sanford Worthington Medical Center – Worthington</li>
-              <li>Sleepy Eye Medical Center –  Sleepy Eye</li>
-              <li>Stevens Community Medical  Center – Morris</li>
-              <li>St. Elizabeth's Medical Center – Wabasha</li>
-              <li>St. Francis Regional Medical Center – Shakopee</li>
-              <li>Swift County-Benson Hospital – Benson</li>
-              <li>Tri-County Health Care – Wadena</li>
-              <li>Two-Twelve Medical Center – Chaska</li>
-              <li>United Hospital District – Blue Earth</li>
-              <li>Windom Area Hospital – Windom</li>
-              <li>Winona Health System – Winona</li>
-              <li>Woodwinds Health Campus – Woodbury</li>
-            </ol>
-            <p>For more information, email <a href="mailto:health.stroke@state.mn.us">health.stroke@state.mn.us</a> or call 651-201-4095.</p>
-            <p><a href="/diseases/cardiovascular/stroke/resources.html">Resources:</a> Find all of  the documents, tools, guidance documents, and resources produced by the Stroke Program  for our partners.      </p>
-          
-            </div>
-  </body>
-</html>
+<h1>Minnesota Stroke System Designated Hospitals </h1>
+      <p>(116 hospitals - Updated 3/01/2020)</p>
+      <p><a href="https://www.google.com/maps/d/u/0/viewer?mid=16llc7z5JmGIpyitiD1Rwlj2EHO-ICVLE&ll=44.35535936040851%2C-91.78517428373243&z=7" target="new">Map of designated hospitals</a></p>
+      <H2>Comprehensive Stroke Centers (12)</H2>
+      <OL>
+        <LI>Abbott Northwestern Hospital – Minneapolis</LI>
+        <LI>Essentia Hospital – Fargo</LI>
+        <LI>Fairview Southdale Hospital – Edina</LI>
+        <LI>Hennepin Health Care – HCMC – Minneapolis</LI>
+        <LI>M Health – University of Minnesota Medical Center – Minneapolis</LI>
+        <LI>Mayo Clinic Hospital – Rochester, Saint  Mary&rsquo;s Campus – Rochester</LI>
+        <LI>North Memorial Health Hospital  – Robbinsdale</LI>
+        <LI>Park Nicollet Methodist Hospital – St. Louis Park</LI>
+        <LI>Regions Hospital – St. Paul</LI>
+        <li>Sanford  Medical Center Fargo – Fargo</li>
+        <li>St.  Cloud Hospital – St. Cloud</li>
+        <LI>United Hospital – St. Paul</LI>
+      </OL>
+      <H2>Primary Stroke Centers (12)</H2>
+      <OL>
+        <LI>Altru Health  System – Grand Forks, ND</LI>
+        <LI>Essentia Health St. Joseph's Medical Center –  Brainerd</LI>
+        <LI>Essentia Health St. Mary's Medical Center – Duluth*</LI>
+        <LI>Gundersen Health  System- La Crosse – La Crosse, WI</LI>
+        <LI>Mayo Clinic Health System Franciscan Healthcare  – La Crosse, WI</LI>
+        <LI>Mayo Clinic Health System in Mankato – Mankato</LI>
+        <LI>Mercy Hospital – Coon Rapids</LI>
+        <LI>Sanford USD Medical Center – Sioux Falls,  SD</LI>
+        <LI>St. John's Hospital – Maplewood</LI>
+        <LI>St. Joseph's Hospital – St. Paul</LI>
+        <LI>St. Luke's Hospital – Duluth</LI>
+        <LI>Unity Hospital – Fridley</LI>
+		</OL>
+	 <p>*Certified by The Joint Commission as a Thrombectomy-Capable Stroke (TSC) Center. </p>
+      <H2>Acute Stroke Ready Hospitals (92)</H2>
+      <OL>
+        <LI>Alomere Health - Alexandria</LI>
+        <LI>Appleton Area Health Services – Appleton</LI>
+        <LI>Avera Marshall Regional Medical Center – Marshall</LI>
+        <LI>Buffalo Hospital – Buffalo</LI>
+        <LI>Cambridge Medical Center – Cambridge</LI>
+        <LI>Carris Health Redwood–  Redwood Falls</LI>
+        <LI>Carris Health Rice  Memorial Hospital – Willmar<strong> </strong></LI>
+        <LI>CentraCare Health- Long Prairie – Long Prairie</LI>
+        <LI>CentraCare Health-Melrose – Melrose</LI>
+        <LI>CentraCare Health-Monticello – Monticello</LI>
+        <LI>CentraCare Health- Paynesville – Paynesville</LI>
+        <LI>CentraCare Health- Sauk Centre – Sauk Centre</LI>
+        <LI>CHI St. Gabriel's Health – Little Falls</LI>
+        <LI>Community Memorial Hospital  – Cloquet</LI>
+        <LI>Cook Hospital – Cook</LI>
+        <LI>Cuyuna Regional Medical Center – Crosby</LI>
+        <LI>District One Hospital – Faribault</LI>
+        <LI>Essentia Health Ada – Ada</LI>
+        <LI>Essentia Health Deer River  – Deer River</LI>
+        <LI>Essentia Health Fosston – Fosston</LI>
+        <LI>Essentia Health Holy Trinity Hospital  – Graceville</LI>
+        <LI>Essentia Health Northern Pines – Aurora</LI>
+        <LI>Essentia Health Sandstone – Sandstone</LI>
+        <LI>Essentia Health St. Mary's Medical Center – Detroit  Lakes</LI>
+        <LI>Essentia Health Virginia  – Virginia, MN</LI>
+        <LI>Fairview Lakes Regional Medical Center – Wyoming</LI>
+        <LI>Fairview Northland Medical Center – Princeton</LI>
+        <LI>Fairview Range Medical Center – Hibbing</LI>
+        <LI>Fairview Ridges Hospital – Burnsville</LI>
+        <LI>FirstLight Health System – Mora </LI>
+        <LI>Glacial Ridge Health System – Glenwood</LI>
+        <LI>Glencoe Regional Health Services – Glencoe</LI>
+        <LI>Grand Itasca Clinic &amp; Hospital – Grand  Rapids</LI>
+        <LI>Granite Falls Municipal Hospital – Granite Falls</LI>
+        <LI>Hutchinson Health – Hutchinson</LI>
+        <LI>Lake Region Healthcare – Fergus Falls</LI>
+        <LI>Lakeview Hospital – Stillwater</LI>
+        <LI>Lake View Hospital – Two  Harbors</LI>
+        <LI>Lakewood Health System – Staples</LI>
+        <LI>LifeCare Medical Center – Roseau</LI>
+        <LI>Madelia Community Hospital – Madelia</LI>
+        <LI>Mahnomen Health Center – Mahnomen</LI>
+        <LI>Maple Grove Hospital – Maple Grove</LI>
+        <LI>Mayo Clinic Health System –  Albert Lea</LI>
+        <LI>Mayo Clinic Health System –  Austin</LI>
+        <LI>Mayo Clinic Health System –  Cannon Falls</LI>
+        <LI>Mayo Clinic Health System – Fairmont </LI>
+        <LI>Mayo Clinic Health System –  Lake City</LI>
+        <LI>Mayo Clinic Health System – New Prague </LI>
+        <LI>Mayo Clinic Health System –  Red Wing</LI>
+        <LI>Mayo Clinic Health System – St. James</LI>
+        <LI>Mayo Clinic Health System – Waseca </LI>
+        <LI>Meeker Memorial Hospital – Litchfield</LI>
+        <LI>Mercy Hospital – Moose Lake</LI>
+        <LI>Mille Lacs Health System – Onamia</LI>
+        <LI>Murray County Medical Center – Slayton</LI>
+        <LI>New Ulm Medical Center – New Ulm</LI>
+        <LI>Northfield Hospital – Northfield </LI>
+        <LI>Ortonville Area Health Services – Ortonville</LI>
+        <LI>Owatonna Hospital - Owatonna</LI>
+        <LI>Perham Health – Perham</LI>
+        <LI>Pipestone County Medical Center – Pipestone</LI>
+        <LI>Regina Hospital – Hastings</LI>
+        <LI>RC Hospital and Clinics – Olivia</LI>
+        <LI>Ridgeview Le Sueur Medical Center  – Le Sueur</LI>
+        <LI>Ridgeview Medical Center – Waconia</LI>
+        <LI>Ridgeview Sibley Medical Center – Arlington </LI>
+        <LI>River Falls Area Hospital – River Falls</LI>
+        <LI>River's Edge Hospital &amp; Clinic – St. Peter</LI>
+        <LI>RiverView Health – Crookston</LI>
+        <LI>Riverwood Healthcare Center – Aitkin</LI>
+        <LI>Sanford Bagley Medical Center – Bagley </LI>
+        <LI>Sanford Bemidji Medical Center – Bemidji </LI>
+        <LI>Sanford Canby Medical Center – Canby</LI>
+        <LI>Sanford Jackson Medical Center – Jackson</LI>
+        <LI>Sanford Luverne Medical Center – Luverne</LI>
+        <LI>Sanford Medical Center Thief River  Falls – Thief River</LI>
+        <LI>Sanford Medical Center Wheaton – Wheaton</LI>
+        <LI>Sanford Tracy Medical Center – Tracy</LI>
+        <LI>Sanford Westbrook Medical Center – Westbrook</LI>
+        <LI>Sanford Worthington Medical Center – Worthington</LI>
+        <LI>Sleepy Eye Medical Center –  Sleepy Eye</LI>
+        <LI>Stevens Community Medical  Center – Morris</LI>
+        <LI>St. Elizabeth's Medical Center – Wabasha</LI>
+        <LI>St. Francis Regional Medical Center – Shakopee</LI>
+        <LI>Swift County-Benson Hospital – Benson</LI>
+        <LI>Tri-County Health Care – Wadena</LI>
+        <LI>Two-Twelve Medical Center – Chaska</LI>
+        <LI>United Hospital District – Blue Earth</LI>
+        <LI>Windom Area Hospital – Windom</LI>
+        <LI>Winona Health System – Winona</LI>
+        <LI>Woodwinds Health Campus – Woodbury</LI>
+      </OL>
+      <p>For more information, email <A href="mailto:health.stroke@state.mn.us">health.stroke@state.mn.us</A> or call 651-201-4095.</p>
+      <p><A href="/diseases/cardiovascular/stroke/resources.html">Resources:</A> Find all of  the documents, tools, guidance documents, and resources produced by the Stroke Program  for our partners.      </p>
+    
+      </div>
+</div>
+
+<script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=mnhealth" async="async"></script>
+  <div id="sidebar_right">
+			<ul id="socialMedia">
+				<li class="addthis_toolbox addthis_default_style"><a href="http://www.addthis.com/bookmark.php?v=250&amp;pub=mnhealth" class="addthis_button share">Share This</a></li>
+			</ul>
+
+			<h1>Spotlight</h1>
+	        <p>
+    <div style="margin:0;padding:0;display:inline;">
+	</p>
+	<form accept-charset="UTF-8" action="https://public.govdelivery.com/accounts/MNMDH/subscribers/qualify" method="post">
+	  <input name="utf8" type="hidden" value="✓" /><input name="authenticity_token" type="hidden" value="mhft3TgejDGz0Dozo51LSxhF6AItCA/qQHl4YdBHHnM=" /></div>
+<input name="topic_id" type="hidden" value="MNMDH_49" />
+<fieldset style="width:145px;">
+<legend>
+Email Updates
+</legend>
+<div>
+<p>Sign up for cardiovascular health updates:</p>
+<label for="email">Email Address</label>
+<input id="email" name="email" type="text" style="width:135px;" />
+</div>
+<div class='button_panel'>
+  <input class="form_button" name="commit" type="submit" value="Submit" />
+</div>
+</fieldset>
+</form>
+
+
+
+         
+   <br>
+   <h2>Questions?</h2>
+<p>Contact Cardiovascular Health Program: <a href="mailto:health.heart@state.mn.us">health.heart@state.mn.us</a></p>
+</div>
+
+<footer>
+<!-- close content --></div></div>
+<!-- Begin Footer Include -->
+<div id="footer">
+	<div id="footerContainer">
+		<div class="footerTopics">
+			<ul class="clearfix">
+				<li><a href="/people/index.html">Individual &amp; Family Health</a></li>
+				<li><a href="/facilities/index.html">Health Care Facilities, Providers <br>
+&amp; Insurance</a></li>
+				<li><a href="/data/index.html">Data, Statistics and Legislation</a></li>
+                <li><a href="/diseases/index.html">Diseases &amp; Conditions</a></li>
+                <li><a href="/communities/index.html">Healthy Communities, Environment <br>
+              &amp; Workplaces</a></li>
+                <li><a href="/about/index.html">About MDH</a></li>
+                <li><a href="/about/locations/index.html">Locations &#38; Directions</a></li>
+                <li><a href="/forms/feedback/mail.html">Comments &#38; Questions</a></li>
+                <li><a href="/about/privacy.html">Privacy Statement &amp; Disclaimer</a></li>
+                <li><a href="/about/equalopp.html">Equal Opportunity</a>		</li>
+			</ul>
+		</div>
+      <div class="footerTopics"> 
+      <p>651-201-5000 Phone<br />
+				888-345-0823 Toll-free</p>
+			<p>Information on this website is available in alternative formats upon request. </p>
+		<p style="text-align:center; overflow:hidden"><a href="https://mn.gov/portal/" onClick="return OuttaHere(); return false;"><img src="https://mn.gov/portal/assets/mn.logo.footer_tcm1077-65019.png" alt="Minnesota.gov" /></a></p><p style="text-align:center"><a href=			"https://www.phaboard.org/"><img src="/images/phabseal.png"  width="125" height="125" alt="Public Health Accreditation Board" /></a></p>
+	  </div>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-20272425-1']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+
+<script type="text/javascript">
+/*<![CDATA[*/
+(function() {
+var sz = document.createElement('script'); sz.type = 'text/javascript'; sz.async = true;
+sz.src = '//siteimproveanalytics.com/js/siteanalyze_6486.js';
+var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(sz, s);
+})();
+/*]]>*/
+</script>
+
+<script>
+$(document).ready(function() {
+	if(document.URL.indexOf("health.state.mn.us/macros/topics/orginfo.html") != -1) {
+		$("#about").addClass("activeBanner");
+	}
+	else if(document.URL.indexOf("health.state.mn.us/index.html") != -1) {
+		$("#home").addClass("activeBanner");
+	}
+
+});
+</script>
+</footer>
+
+<span class="small">Updated Friday, 28-Feb-2020 10:04:37 CST</span>
+</BODY></HTML>
