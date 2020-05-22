@@ -1,11 +1,10 @@
 import rp from "request-promise-native";
 import cheerio from "cheerio";
 import _ from "lodash";
+import { Loader, LoaderOptions } from 'google-maps';
 
-var GoogleMapsLoader = require('google-maps');
-GoogleMapsLoader.KEY = 'AIzaSyAGZX9cdeWsmegU4ODemgrLNYuzNhlw6cw';
-GoogleMapsLoader.LIBRARIES = [];
-GoogleMapsLoader.VERSION = '3.36';
+const options = {/* todo */};
+const googleMapsLoader = new Loader('AIzaSyAGZX9cdeWsmegU4ODemgrLNYuzNhlw6cw', options);
 
 class LocationHandler { 
   comprehensiveStrokeCenters = [];
@@ -87,7 +86,7 @@ class LocationHandler {
     var matrixService, myLatLng;
     promises.push(
       new Promise((resolve) => {
-        GoogleMapsLoader.load((google) => {
+        googleMapsLoader.load((google) => {
           myLatLng = new google.maps.LatLng(this.position);
           matrixService = new google.maps.DistanceMatrixService();
           resolve(matrixService);
