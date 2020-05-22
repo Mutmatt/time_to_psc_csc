@@ -178,7 +178,7 @@ class LocationHandler {
     //for some reason they have a multi-part string for a hospital -_- (e.g. Mayo Clinic Hospital – Rochester, Saint Mary’s Campus – Rochester)
     // We want ["Mayo Clinic Hospital, Saint Mary’s Campus", "Rochester"]
     var listItem = item.children[0].data;
-    listItem = listItem.replace('[â\–]', '-');
+    listItem = listItem.replace('[â–]', '-');
     listItem = listItem.replace(/[^\x00-\x7F]/g, "");
     var hospital = listItem.split('-');
     if (hospital.length === 3) {
