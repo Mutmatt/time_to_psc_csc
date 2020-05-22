@@ -39,7 +39,6 @@ class StrokeTreatment extends Component {
         };
 
         if (this.isCsc(defaultState)) {
-            console.log("Tested isCsc and found true");
             defaultState.decisionText = CscText;
             defaultState.isCsc = true;
         }

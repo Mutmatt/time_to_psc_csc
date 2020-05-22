@@ -129,7 +129,6 @@ class LocationHandler {
         travelMode: 'DRIVING',
       }, (response) => {
         this.timeBetween = this.parseDistanceMatrixResults([{}], response)[0].timeTo;
-        console.log(this.timeBetween);
         resolve();
       });
     }));
