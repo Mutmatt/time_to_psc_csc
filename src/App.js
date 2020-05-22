@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import StrokeTreatment from './StrokeTreatment';
 import LocationHandler from './LocationHandler';
+import * as fa from '@fortawesome/fontawesome-svg-core';
+
 
 import './App.css';
 
@@ -50,7 +52,7 @@ class App extends Component {
     }
     
     if (loading) {
-      return ( <div>Spinner here</div>);
+      return ( <div>{fa.icon('spinner')}</div>);
     }
 
     return (

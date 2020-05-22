@@ -68,7 +68,7 @@ class LocationHandler {
     this.comprehensiveStrokeCenters = [];
     this.primaryStrokeCenters = [];
     var options = {
-      uri: 'https://cors.io/?https://www.health.state.mn.us/diseases/cardiovascular/stroke/designationlist.html',
+      uri: `https://matterickson.me/time_to_psc_csc/mn-designationlist.html`,
       transform: (body) => {
         return cheerio.load(body);
       }
