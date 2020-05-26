@@ -57,6 +57,7 @@ class StrokeTreatment extends Component {
 
     triggerHospitalChange = (changedState, value) => {
         _.forEach(changedState, (thisState, index) => {
+            // eslint-disable-next-line
             this.state[thisState] = value[index];
         })
         

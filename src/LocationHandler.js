@@ -1,7 +1,7 @@
 import rp from "request-promise-native";
 import cheerio from "cheerio";
 import _ from "lodash";
-import { Loader, LoaderOptions } from 'google-maps';
+import { Loader } from 'google-maps';
 
 const options = {/* todo */};
 const googleMapsLoader = new Loader('AIzaSyAGZX9cdeWsmegU4ODemgrLNYuzNhlw6cw', options);
@@ -67,7 +67,7 @@ class LocationHandler {
     this.comprehensiveStrokeCenters = [];
     this.primaryStrokeCenters = [];
     var options = {
-      uri: `https://matterickson.me/time_to_psc_csc/mn-designationlist.html`,
+      uri: `${window.location.href}/mn-designationlist.html`,
       transform: (body) => {
         return cheerio.load(body);
       }
@@ -76,68 +76,46 @@ class LocationHandler {
     var csc = body('h2:contains("Comprehensive Stroke Center")').next('ol').children('li');
     _.forEach(csc, (item) => {
       this.comprehensiveStrokeCenters.push(this.parseHospital(item));
-     });
+    });
     var psc = body('h2:contains("Primary Stroke Centers")').next('ol').children('li');
     _.forEach(psc, (item) => { 
       this.primaryStrokeCenters.push(this.parseHospital(item));
     });
 
-    promises = [];
-    var matrixService, myLatLng;
-    promises.push(
-      new Promise((resolve) => {
-        googleMapsLoader.load((google) => {
-          myLatLng = new google.maps.LatLng(this.position);
-          matrixService = new google.maps.DistanceMatrixService();
-          resolve(matrixService);
-        });
-      })
-    );
-    await Promise.all(promises);
+    const google = await googleMapsLoader.load();
+    const myLatLng = new google.maps.LatLng(this.position);
+    const matrixService = new google.maps.DistanceMatrixService();
 
-    promises = [];
-    promises.push(new Promise((resolve) => {
-      matrixService.getDistanceMatrix(
+    await matrixService.getDistanceMatrix(
       { origins: [ myLatLng ],
         destinations: this.comprehensiveStrokeCenters.map((csc) => `${csc.name} ${csc.city}` ),
         travelMode: 'DRIVING',
       }, (response) => {
         this.comprehensiveStrokeCenters = this.parseDistanceMatrixResults(this.comprehensiveStrokeCenters, response);
-        resolve();
       });
-    }));
 
-    promises.push(new Promise((resolve) => {
-      matrixService.getDistanceMatrix(
+    await matrixService.getDistanceMatrix(
       { origins: [ myLatLng ],
         destinations: this.primaryStrokeCenters.map((psc) => `${psc.name} ${psc.city}` ),
         travelMode: 'DRIVING',
       }, (response) => {
         this.primaryStrokeCenters = this.parseDistanceMatrixResults(this.primaryStrokeCenters, response);
-        resolve();
       });
-    }));
-    
-    await Promise.all(promises);
 
-    promises = [];
-    promises.push(new Promise((resolve) => {
-      matrixService.getDistanceMatrix(
+    await matrixService.getDistanceMatrix(
       { origins: [ `${this.primaryStrokeCenters[0].name} ${this.primaryStrokeCenters[0].city}` ],
         destinations: [ `${this.comprehensiveStrokeCenters[0].name} ${this.comprehensiveStrokeCenters[0].city}` ],
         travelMode: 'DRIVING',
       }, (response) => {
         this.timeBetween = this.parseDistanceMatrixResults([{}], response)[0].timeTo;
-        resolve();
       });
-    }));
 
-    await Promise.all(promises);
     sessionStorage.setItem('csc', this.comprehensiveStrokeCenters);
     sessionStorage.setItem('psc', this.primaryStrokeCenters);
   }
 
   parseDistanceMatrixResults(hospitalList, response) {
+    console.error("$$$$$", response);
     _.forEach(response.rows[0].elements, (matrixItem, index) => {
       if (matrixItem.status === 'OK') {
         hospitalList[index].timeTo = Math.round(matrixItem.duration.value / 60);//seconds to minutes and round
@@ -179,6 +157,7 @@ class LocationHandler {
     // We want ["Mayo Clinic Hospital, Saint Mary’s Campus", "Rochester"]
     var listItem = item.children[0].data;
     listItem = listItem.replace('[â–]', '-');
+    // eslint-disable-next-line
     listItem = listItem.replace(/[^\x00-\x7F]/g, "");
     var hospital = listItem.split('-');
     if (hospital.length === 3) {
