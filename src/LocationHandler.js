@@ -85,11 +85,11 @@ class LocationHandler {
     });
 
     const google = await googleMapsLoader.load();
-    const myLatLng = new google.maps.LatLng(this.position);
     const matrixService = new google.maps.DistanceMatrixService();
+    const userPosition = this.position;
 
     await matrixService.getDistanceMatrix(
-      { origins: [ myLatLng ],
+      { origins: [ userPosition ],
         destinations: this.comprehensiveStrokeCenters.map((csc) => `${csc.name} ${csc.city}` ),
         travelMode: 'DRIVING',
       }, (response) => {
@@ -97,7 +97,7 @@ class LocationHandler {
       });
 
     await matrixService.getDistanceMatrix(
-      { origins: [ myLatLng ],
+      { origins: [ userPosition ],
         destinations: this.primaryStrokeCenters.map((psc) => `${psc.name} ${psc.city}` ),
         travelMode: 'DRIVING',
       }, (response) => {
