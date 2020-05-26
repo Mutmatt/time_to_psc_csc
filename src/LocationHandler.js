@@ -23,6 +23,12 @@ class LocationHandler {
     }
   }
 
+  async getLocation(options) {
+    return new Promise(function (resolve, reject) {
+      this.setUserPosition(this.geo.getCurrentPosition(resolve, reject, options));
+    });
+  }
+
   setUserPosition(position) {
     this.position = { lat: position.coords.latitude, lng: position.coords.longitude };
   }
@@ -57,8 +63,7 @@ class LocationHandler {
 
   async downloadNewList() {
     if (!this.position) {
-      const currentPosition = await this.geo.getCurrentPosition();
-      this.setUserPosition(currentPosition);
+      await this.getLocation()
     }
 
     this.comprehensiveStrokeCenters = [];
