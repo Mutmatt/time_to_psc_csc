@@ -55,14 +55,10 @@ class LocationHandler {
   }
 
   async downloadNewList() {
-    var promises = [];
     if (!this.position) {
-      promises.push(new Promise((resolve) => this.geo.getCurrentPosition((position) => {
-        this.setUserPosition(position);
-        resolve();
-      })));
+      const currentPosition = await this.geo.getCurrentPosition();
+      this.setUserPosition(currentPosition);
     }
-    await Promise.all(promises);
 
     this.comprehensiveStrokeCenters = [];
     this.primaryStrokeCenters = [];
@@ -115,7 +111,6 @@ class LocationHandler {
   }
 
   parseDistanceMatrixResults(hospitalList, response) {
-    console.error("$$$$$", response);
     _.forEach(response.rows[0].elements, (matrixItem, index) => {
       if (matrixItem.status === 'OK') {
         hospitalList[index].timeTo = Math.round(matrixItem.duration.value / 60);//seconds to minutes and round
