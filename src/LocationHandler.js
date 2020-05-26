@@ -3,8 +3,9 @@ import cheerio from "cheerio";
 import _ from "lodash";
 import { Loader } from 'google-maps';
 
+
 const options = {/* todo */};
-const googleMapsLoader = new Loader('AIzaSyAGZX9cdeWsmegU4ODemgrLNYuzNhlw6cw', options);
+const googleMapsLoader = new Loader(process.env.REACT_APP_MAPS_API_KEY, options);
 
 class LocationHandler { 
   comprehensiveStrokeCenters = [];
