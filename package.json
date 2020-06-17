@@ -14,7 +14,7 @@
     "react-rangeslider": "^2.2.0",
     "react-scripts": "^3.4.1",
     "request-promise-native": "^1.0.8",
-    "snyk": "^1.328.0"
+    "snyk": "^1.329.0"
   },
   "scripts": {
     "predeploy": "yarn build",
