@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "http://mutmatt.github.io/time_to_psc_csc",
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.28",
+    "@fortawesome/fontawesome-svg-core": "^1.2.29",
     "cheerio": "^1.0.0-rc.3",
     "dotenv": "^8.2.0",
     "google-maps": "^4.2.3",
