@@ -10,8 +10,7 @@ import './App.css';
 export const THROMBECTOMY = 'Thrombectomy';
 export const ALTEPLASE ='IV Alteplase';
 
-@observer
-class App extends Component {
+const App = observer(class App extends Component {
   constructor(props, context) {
     super(props, context);
     this.handleTabClick = this.handleTabClick.bind(this);
@@ -84,6 +83,6 @@ class App extends Component {
       </div>
     );
   }
-}
+});
 
 export default App;

@@ -1,17 +1,16 @@
-import rp from "request-promise-native";
+import axios from "axios";
 import cheerio from "cheerio";
 import _ from "lodash";
 import { Loader } from 'google-maps';
 import { observable } from "mobx";
 
+
 const options = {/* todo */};
 const googleMapsLoader = new Loader(process.env.REACT_APP_MAPS_API_KEY, options);
 
 class LocationHandler { 
-  @observable
-  comprehensiveStrokeCenters = [];
-  @observable
-  primaryStrokeCenters = [];
+  comprehensiveStrokeCenters = observable([]);
+  primaryStrokeCenters = observable([]);
   position = { latitude: 0, longitude: 0 };
   geo;
   timeBetween;
@@ -64,12 +63,12 @@ class LocationHandler {
     this.comprehensiveStrokeCenters = [];
     this.primaryStrokeCenters = [];
     var options = {
-      uri: `${window.location.href}/mn-designationlist.html`,
-      transform: (body) => {
-        return cheerio.load(body);
-      }
+      url: `https://api.codetabs.com/v1/proxy?quest=https://www.health.state.mn.us/diseases/cardiovascular/stroke/designationlist.html`,
     };
-    var body = await rp(options);
+    var mdhList = await axios(options);
+
+    const body = cheerio.load(mdhList.data);
+
     var csc = body('h2:contains("Comprehensive Stroke Center")').next('ol').children('li');
     _.forEach(csc, (item) => {
       this.comprehensiveStrokeCenters.push(this.parseHospital(item));
@@ -78,8 +77,6 @@ class LocationHandler {
     _.forEach(psc, (item) => { 
       this.primaryStrokeCenters.push(this.parseHospital(item));
     });
-
-    // https://www.google.com/maps/d/u/0/viewer?mid=16llc7z5JmGIpyitiD1Rwlj2EHO-ICVLE&ll=44.35535936040851%2C-91.78517428373243&z=7
 
     const google = await googleMapsLoader.load();
     const matrixService = new google.maps.DistanceMatrixService();
@@ -161,10 +158,11 @@ class LocationHandler {
     //for some reason they have a multi-part string for a hospital -_- (e.g. Mayo Clinic Hospital – Rochester, Saint Mary’s Campus – Rochester)
     // We want ["Mayo Clinic Hospital, Saint Mary’s Campus", "Rochester"]
     var listItem = item.children[0].data;
-    listItem = listItem.replace('[â–]', '-');
+    
+    var properSplit = listItem.replace(/[â–]/g, '-');
     // eslint-disable-next-line
-    listItem = listItem.replace(/[^\x00-\x7F]/g, "");
-    var hospital = listItem.split('-');
+    var cleanItem = properSplit.replace(/[^\x00-\x7F]/g, "");
+    var hospital = cleanItem.split('-');
     if (hospital.length === 3) {
       var newHospitalName = hospital[1].replace(/.*, / ,'');
       hospital[0] = hospital[0] + newHospitalName;
