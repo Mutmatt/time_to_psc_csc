@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import StrokeTreatment from './StrokeTreatment';
 import LocationHandler from './LocationHandler';
 import * as fa from '@fortawesome/fontawesome-svg-core';
+import { observer } from "mobx-react"
 
 
 import './App.css';
@@ -9,6 +10,7 @@ import './App.css';
 export const THROMBECTOMY = 'Thrombectomy';
 export const ALTEPLASE ='IV Alteplase';
 
+@observer
 class App extends Component {
   constructor(props, context) {
     super(props, context);
@@ -25,9 +27,6 @@ class App extends Component {
       this.locationHandler.downloadNewList().then(() => {
         this.setState({
           tab: ALTEPLASE,
-          cscs: this.locationHandler.comprehensiveStrokeCenters,
-          pscs: this.locationHandler.primaryStrokeCenters,
-          timeBetween: this.locationHandler.timeBetween,
           loading: false
         });
       });
@@ -41,14 +40,14 @@ class App extends Component {
     this.setState({ tab: e.target.name });
   }
 
-  render() {    
-    let { tab, cscs, pscs, timeBetween, loading } = this.state;
+  render() {
+    let { tab, loading } = this.state;
     let timeToCsc, timeToPsc, cscName, pscName;
-    if (cscs.length > 0 && pscs.length > 0) {
-      timeToCsc = cscs[0].timeTo;
-      timeToPsc = pscs[0].timeTo;
-      cscName = cscs[0].name + ' ' + cscs[0].city;
-      pscName = pscs[0].name + ' ' + pscs[0].city;
+    if (this.locationHandler.comprehensiveStrokeCenters.length > 0 && this.locationHandler.comprehensiveStrokeCenters.length > 0) {
+      timeToCsc = this.locationHandler.comprehensiveStrokeCenters[0].timeTo;
+      timeToPsc = this.locationHandler.primaryStrokeCenters[0].timeTo;
+      cscName = this.locationHandler.comprehensiveStrokeCenters[0].name + ' ' + this.locationHandler.comprehensiveStrokeCenters[0].city;
+      pscName = this.locationHandler.primaryStrokeCenters[0].name + ' ' + this.locationHandler.primaryStrokeCenters[0].city;
     }
     
     if (loading) {
@@ -80,7 +79,7 @@ class App extends Component {
               timeToPsc={timeToPsc}
               cscName={cscName}
               pscName={pscName}
-              timeBetween={timeBetween} />
+              timeBetween={this.locationHandler.timeBetween} />
             : null }
       </div>
     );

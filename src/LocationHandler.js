@@ -2,30 +2,25 @@ import rp from "request-promise-native";
 import cheerio from "cheerio";
 import _ from "lodash";
 import { Loader } from 'google-maps';
-
+import { observable } from "mobx";
 
 const options = {/* todo */};
 const googleMapsLoader = new Loader(process.env.REACT_APP_MAPS_API_KEY, options);
 
 class LocationHandler { 
+  @observable
   comprehensiveStrokeCenters = [];
+  @observable
   primaryStrokeCenters = [];
   position = { latitude: 0, longitude: 0 };
   geo;
   timeBetween;
 
-  constructor() {
-    if (navigator.geolocation) {
-      this.geo = navigator.geolocation;
-      this.geo.getCurrentPosition((position) => {
-        this.setUserPosition(position);
-      });
-    }
-  }
-
   async getLocation(options) {
     return new Promise(function (resolve, reject) {
-      this.setUserPosition(this.geo.getCurrentPosition(resolve, reject, options));
+      navigator.geolocation.getCurrentPosition((position) => {
+        resolve(position);
+      });
     });
   }
 
@@ -62,8 +57,8 @@ class LocationHandler {
   }
 
   async downloadNewList() {
-    if (!this.position) {
-      await this.getLocation()
+    if ((this.position.longitude === 0 && this.position.latitude === 0) || !this.position) {
+      this.setUserPosition(await this.getLocation());
     }
 
     this.comprehensiveStrokeCenters = [];
@@ -84,6 +79,8 @@ class LocationHandler {
       this.primaryStrokeCenters.push(this.parseHospital(item));
     });
 
+    // https://www.google.com/maps/d/u/0/viewer?mid=16llc7z5JmGIpyitiD1Rwlj2EHO-ICVLE&ll=44.35535936040851%2C-91.78517428373243&z=7
+
     const google = await googleMapsLoader.load();
     const matrixService = new google.maps.DistanceMatrixService();
     const userPosition = this.position;
@@ -93,7 +90,9 @@ class LocationHandler {
         destinations: this.comprehensiveStrokeCenters.map((csc) => `${csc.name} ${csc.city}` ),
         travelMode: 'DRIVING',
       }, (response) => {
+        console.log("$$$$$ CSC B4", this.comprehensiveStrokeCenters[0], this.comprehensiveStrokeCenters[this.comprehensiveStrokeCenters.length-1]);
         this.comprehensiveStrokeCenters = this.parseDistanceMatrixResults(this.comprehensiveStrokeCenters, response);
+        console.log("$$$$$ CSC A2", this.comprehensiveStrokeCenters[0], this.comprehensiveStrokeCenters[this.comprehensiveStrokeCenters.length-1]);
       });
 
     await matrixService.getDistanceMatrix(
@@ -101,7 +100,9 @@ class LocationHandler {
         destinations: this.primaryStrokeCenters.map((psc) => `${psc.name} ${psc.city}` ),
         travelMode: 'DRIVING',
       }, (response) => {
+        console.log("$$$$$ PSC B4", this.primaryStrokeCenters[0], this.primaryStrokeCenters[this.primaryStrokeCenters.length-1]);
         this.primaryStrokeCenters = this.parseDistanceMatrixResults(this.primaryStrokeCenters, response);
+        console.log("$$$$$ PSC A2", this.primaryStrokeCenters[0], this.primaryStrokeCenters[this.primaryStrokeCenters.length-1]);
       });
 
     await matrixService.getDistanceMatrix(
@@ -109,11 +110,13 @@ class LocationHandler {
         destinations: [ `${this.comprehensiveStrokeCenters[0].name} ${this.comprehensiveStrokeCenters[0].city}` ],
         travelMode: 'DRIVING',
       }, (response) => {
+        
         this.timeBetween = this.parseDistanceMatrixResults([{}], response)[0].timeTo;
       });
 
     sessionStorage.setItem('csc', this.comprehensiveStrokeCenters);
     sessionStorage.setItem('psc', this.primaryStrokeCenters);
+    return;
   }
 
   parseDistanceMatrixResults(hospitalList, response) {
@@ -128,7 +131,8 @@ class LocationHandler {
         hospitalList[index].timeToDistance = "Failed Request";
       }
     });
-    return _.orderBy(hospitalList, 'timeTo', 'asc');
+    const sortedList = _.orderBy(hospitalList, 'timeTo', 'asc');
+    return sortedList;
   }
 
   getClosest(hospitalList) {
