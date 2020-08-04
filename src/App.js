@@ -45,8 +45,8 @@ const App = observer(class App extends Component {
     if (this.locationHandler.comprehensiveStrokeCenters.length > 0 && this.locationHandler.comprehensiveStrokeCenters.length > 0) {
       timeToCsc = this.locationHandler.comprehensiveStrokeCenters[0].timeTo;
       timeToPsc = this.locationHandler.primaryStrokeCenters[0].timeTo;
-      cscName = this.locationHandler.comprehensiveStrokeCenters[0].name + ' ' + this.locationHandler.comprehensiveStrokeCenters[0].city;
-      pscName = this.locationHandler.primaryStrokeCenters[0].name + ' ' + this.locationHandler.primaryStrokeCenters[0].city;
+      cscName = this.locationHandler.comprehensiveStrokeCenters[0].name + ' - ' + this.locationHandler.comprehensiveStrokeCenters[0].city;
+      pscName = this.locationHandler.primaryStrokeCenters[0].name + ' - ' + this.locationHandler.primaryStrokeCenters[0].city;
     }
     
     if (loading) {

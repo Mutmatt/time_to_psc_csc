@@ -62,18 +62,15 @@ class LocationHandler {
 
     this.comprehensiveStrokeCenters = [];
     this.primaryStrokeCenters = [];
-    var options = {
-      url: `https://api.codetabs.com/v1/proxy?quest=https://www.health.state.mn.us/diseases/cardiovascular/stroke/designationlist.html`,
-    };
-    var mdhList = await axios(options);
+    const mdhList = await axios({ url: `https://api.codetabs.com/v1/proxy?quest=https://www.health.state.mn.us/diseases/cardiovascular/stroke/designationlist.html` });
 
     const body = cheerio.load(mdhList.data);
 
-    var csc = body('h2:contains("Comprehensive Stroke Center")').next('ol').children('li');
+    const csc = body('h2:contains("Comprehensive Stroke Center")').next('ol').children('li');
     _.forEach(csc, (item) => {
       this.comprehensiveStrokeCenters.push(this.parseHospital(item));
     });
-    var psc = body('h2:contains("Primary Stroke Centers")').next('ol').children('li');
+    const psc = body('h2:contains("Primary Stroke Centers")').next('ol').children('li');
     _.forEach(psc, (item) => { 
       this.primaryStrokeCenters.push(this.parseHospital(item));
     });
@@ -133,11 +130,17 @@ class LocationHandler {
   }
 
   getClosest(hospitalList) {
-    var closest = { longitude: -1, latitude: -1, overall: -1, index: -1 };
+    let closest = { 
+      longitude: -1, 
+      latitude: -1, 
+      overall: -1, 
+      index: -1,
+      hospital: null
+    };
     hospitalList.forEach((hospital, index) => {
       if (hospital.location) {
-        var longDelta = Math.abs(this.position.longitude - hospital.location.longitude);
-        var latDelta = Math.abs(this.position.latitude - hospital.location.latitude);
+        const longDelta = Math.abs(this.position.longitude - hospital.location.longitude);
+        const latDelta = Math.abs(this.position.latitude - hospital.location.latitude);
         if (longDelta + latDelta < closest.overall
             || closest.overall === -1) {
            closest = { 
@@ -157,21 +160,19 @@ class LocationHandler {
   parseHospital(item) {
     //for some reason they have a multi-part string for a hospital -_- (e.g. Mayo Clinic Hospital – Rochester, Saint Mary’s Campus – Rochester)
     // We want ["Mayo Clinic Hospital, Saint Mary’s Campus", "Rochester"]
-    var listItem = item.children[0].data;
+    const listItem = item.children[0].data;
     
-    var properSplit = listItem.replace(/[â–]/g, '-');
+    const properSplit = listItem.replace(/[â–]/g, '-');
     // eslint-disable-next-line
-    var cleanItem = properSplit.replace(/[^\x00-\x7F]/g, "");
-    var hospital = cleanItem.split('-');
+    const cleanItem = properSplit.replace(/[^\x00-\x7F]/g, "");
+    const hospital = cleanItem.split('-');
     if (hospital.length === 3) {
-      var newHospitalName = hospital[1].replace(/.*, / ,'');
+      const newHospitalName = hospital[1].replace(/.*, / ,'');
       hospital[0] = hospital[0] + newHospitalName;
       hospital.splice(1, 1);
     }
-    hospital[0] = hospital[0].trim();
-    hospital[1] = hospital[1].trim();
 
-    return { name: hospital[0], city: hospital[1] };
+    return { name: hospital[0].trim(), city: hospital[1].trim() };
   }
 }
 
