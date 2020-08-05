@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ALTEPLASE } from './App';
+import { ALTEPLASE, THROMBECTOMY } from './App';
 import _ from 'lodash';
 
 const PscText = 'You should go to {0} (Primary Stroke Center)';
@@ -16,7 +16,7 @@ class StrokeTreatment extends Component {
 
         if (props.timeBetween) {
             defaultBetween = props.timeBetween;
-        } else if( props.type !== ALTEPLASE) {
+        } else if( props.type === THROMBECTOMY) {
             defaultBetween = 30;
         }
         if (props.pscList && props.pscList[0] && props.pscList[0].timeTo) {
@@ -160,8 +160,9 @@ class StrokeTreatment extends Component {
                 <span>Total time to {title} if</span>
               </div>
               <div className="col-6">
-                <p>PSC First: <strong>{parseInt(this.state.pscNeedle, 10) + parseInt(this.state.ttPsc, 10) + parseInt(this.state.ttBetween, 10)}</strong></p>
+                <p>PSC First: <strong>{parseInt(this.state.pscNeedle, 10) + parseInt(this.state.ttPsc, 10)}</strong></p>
                 <p>CSC First: <strong>{parseInt(this.state.cscNeedle, 10) + parseInt(this.state.ttCsc, 10)}</strong></p>
+                {type === THROMBECTOMY ? <p>PSC requiring transfer to CSC: <strong>{parseInt(this.state.pscNeedle, 10) + parseInt(this.state.ttPsc, 10) + parseInt(this.state.ttBetween, 10)}</strong></p> : ''}
               </div>
             </div>
             <div className="form-group">
