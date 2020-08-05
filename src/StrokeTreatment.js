@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { ALTEPLASE } from './App';
 import _ from 'lodash';
-import { toJS } from 'mobx';
 
 const PscText = 'You should go to {0} (Primary Stroke Center)';
 const CscText = 'You should go to {0} (Comprehensive Stroke Center)';

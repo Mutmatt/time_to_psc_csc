@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import { observer } from 'mobx-react';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+
 import StrokeTreatment from './StrokeTreatment';
 import LocationHandler from './LocationHandler';
-import * as fa from '@fortawesome/fontawesome-svg-core';
-import { observer } from "mobx-react"
-
 import './App.css';
 
 export const THROMBECTOMY = 'Thrombectomy';
@@ -40,7 +41,7 @@ const App = observer(class App extends Component {
     let { tab, loading } = this.state;
 
     if (loading) {
-      return ( <div>{fa.icon('spinner')}</div>);
+      return (<div className="row" style={{height:'50em'}}><div className="mx-auto" style={{paddingTop: '40%'}}><FontAwesomeIcon icon={faSpinner} spin size="10x"/></div></div>);
     }
 
     return (
