@@ -3,12 +3,20 @@ import cheerio from "cheerio";
 import _ from "lodash";
 import { Loader } from 'google-maps';
 import { observable } from "mobx";
+import { promisify } from 'util';
 
 
 const options = {/* todo */};
 const googleMapsLoader = new Loader(process.env.REACT_APP_MAPS_API_KEY, options);
 
 class LocationHandler { 
+  constructor() {
+    this.downloadNewList = this.downloadNewList.bind(this);
+    this.getLocation = this.getLocation.bind(this);
+    this.hasCsc = this.hasCsc.bind(this);
+    this.hasPsc = this.hasPsc.bind(this);
+  }
+
   comprehensiveStrokeCenters = observable([]);
   primaryStrokeCenters = observable([]);
   position = { latitude: 0, longitude: 0 };
@@ -29,30 +37,16 @@ class LocationHandler {
 
   hasCsc() {
     if (!this.comprehensiveStrokeCenters) {
-      this.comprehensiveStrokeCenters = sessionStorage.getItem('csc')
+      this.comprehensiveStrokeCenters.replace(sessionStorage.getItem('csc'));
     }
-    return !!this.comprehensiveStrokeCenters
+    return !!this.comprehensiveStrokeCenters;
   }
 
   hasPsc() {
     if (!this.primaryStrokeCenters) {
-      this.primaryStrokeCenters = sessionStorage.getItem('psc')
+      this.primaryStrokeCenters.replace(sessionStorage.getItem('psc'));
     }
-    return !!this.primaryStrokeCenters
-  }
-
-  async getComprehensiveCenters() {
-    if (!this.hasCsc()) {
-      await this.downloadNewList();
-    }
-    return this.comprehensiveStrokeCenters;
-  }
-
-  async getPrimaryCenters() {
-    if (!this.hasPsc()) {
-      await this.downloadNewList();
-    }
-    return this.primaryStrokeCenters;
+    return !!this.primaryStrokeCenters;
   }
 
   async downloadNewList() {
@@ -60,53 +54,60 @@ class LocationHandler {
       this.setUserPosition(await this.getLocation());
     }
 
-    this.comprehensiveStrokeCenters = [];
-    this.primaryStrokeCenters = [];
     const mdhList = await axios({ url: `https://api.codetabs.com/v1/proxy?quest=https://www.health.state.mn.us/diseases/cardiovascular/stroke/designationlist.html` });
 
     const body = cheerio.load(mdhList.data);
 
     const csc = body('h2:contains("Comprehensive Stroke Center")').next('ol').children('li');
     _.forEach(csc, (item) => {
-      this.comprehensiveStrokeCenters.push(this.parseHospital(item));
+      this.comprehensiveStrokeCenters.push(observable(this.parseHospital(item)));
     });
     const psc = body('h2:contains("Primary Stroke Centers")').next('ol').children('li');
     _.forEach(psc, (item) => { 
-      this.primaryStrokeCenters.push(this.parseHospital(item));
+      this.primaryStrokeCenters.push(observable(this.parseHospital(item)));
     });
 
     const google = await googleMapsLoader.load();
     const matrixService = new google.maps.DistanceMatrixService();
+    const getDistanceMatrix = promisify(matrixService.getDistanceMatrix);
     const userPosition = this.position;
 
-    await matrixService.getDistanceMatrix(
+    try{
+    const cscResponse = await getDistanceMatrix(
       { origins: [ userPosition ],
         destinations: this.comprehensiveStrokeCenters.map((csc) => `${csc.name} ${csc.city}` ),
         travelMode: 'DRIVING',
-      }, (response) => {
-        console.log("$$$$$ CSC B4", this.comprehensiveStrokeCenters[0], this.comprehensiveStrokeCenters[this.comprehensiveStrokeCenters.length-1]);
-        this.comprehensiveStrokeCenters = this.parseDistanceMatrixResults(this.comprehensiveStrokeCenters, response);
-        console.log("$$$$$ CSC A2", this.comprehensiveStrokeCenters[0], this.comprehensiveStrokeCenters[this.comprehensiveStrokeCenters.length-1]);
-      });
+    });
+    const sortedCsc = this.parseDistanceMatrixResults(this.comprehensiveStrokeCenters, cscResponse);
+    this.comprehensiveStrokeCenters.replace(sortedCsc);
+  } catch (e) {
+    const sortedCsc = this.parseDistanceMatrixResults(this.comprehensiveStrokeCenters, e);
+    this.comprehensiveStrokeCenters.replace(sortedCsc);
+  }
 
-    await matrixService.getDistanceMatrix(
+  try {
+    const pscResponse = await getDistanceMatrix(
       { origins: [ userPosition ],
         destinations: this.primaryStrokeCenters.map((psc) => `${psc.name} ${psc.city}` ),
         travelMode: 'DRIVING',
-      }, (response) => {
-        console.log("$$$$$ PSC B4", this.primaryStrokeCenters[0], this.primaryStrokeCenters[this.primaryStrokeCenters.length-1]);
-        this.primaryStrokeCenters = this.parseDistanceMatrixResults(this.primaryStrokeCenters, response);
-        console.log("$$$$$ PSC A2", this.primaryStrokeCenters[0], this.primaryStrokeCenters[this.primaryStrokeCenters.length-1]);
       });
+    const sortedPsc = this.parseDistanceMatrixResults(this.primaryStrokeCenters, pscResponse);
+    this.primaryStrokeCenters.replace(sortedPsc);
+  } catch (e) {
+    const sortedPsc = this.parseDistanceMatrixResults(this.primaryStrokeCenters, e);
+    this.primaryStrokeCenters.replace(sortedPsc);
+  }
 
-    await matrixService.getDistanceMatrix(
+  try {
+    const timeBetweenResponse = await getDistanceMatrix(
       { origins: [ `${this.primaryStrokeCenters[0].name} ${this.primaryStrokeCenters[0].city}` ],
         destinations: [ `${this.comprehensiveStrokeCenters[0].name} ${this.comprehensiveStrokeCenters[0].city}` ],
         travelMode: 'DRIVING',
-      }, (response) => {
-        
-        this.timeBetween = this.parseDistanceMatrixResults([{}], response)[0].timeTo;
       });
+    this.timeBetween = this.parseDistanceMatrixResults([{}], timeBetweenResponse)[0].timeTo;
+  } catch (e) {
+    this.timeBetween = this.parseDistanceMatrixResults([{}], e)[0].timeTo;
+  }
 
     sessionStorage.setItem('csc', this.comprehensiveStrokeCenters);
     sessionStorage.setItem('psc', this.primaryStrokeCenters);
@@ -128,34 +129,6 @@ class LocationHandler {
     const sortedList = _.orderBy(hospitalList, 'timeTo', 'asc');
     return sortedList;
   }
-
-  getClosest(hospitalList) {
-    let closest = { 
-      longitude: -1, 
-      latitude: -1, 
-      overall: -1, 
-      index: -1,
-      hospital: null
-    };
-    hospitalList.forEach((hospital, index) => {
-      if (hospital.location) {
-        const longDelta = Math.abs(this.position.longitude - hospital.location.longitude);
-        const latDelta = Math.abs(this.position.latitude - hospital.location.latitude);
-        if (longDelta + latDelta < closest.overall
-            || closest.overall === -1) {
-           closest = { 
-            longitude: longDelta,
-            latitude: latDelta,
-            overall: (longDelta + latDelta),
-            index: index,
-            hospital: hospital
-          };
-        }
-      }
-    });
-    return closest;
-  }
-
 
   parseHospital(item) {
     //for some reason they have a multi-part string for a hospital -_- (e.g. Mayo Clinic Hospital – Rochester, Saint Mary’s Campus – Rochester)

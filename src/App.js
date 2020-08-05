@@ -4,7 +4,6 @@ import LocationHandler from './LocationHandler';
 import * as fa from '@fortawesome/fontawesome-svg-core';
 import { observer } from "mobx-react"
 
-
 import './App.css';
 
 export const THROMBECTOMY = 'Thrombectomy';
@@ -30,8 +29,6 @@ const App = observer(class App extends Component {
         });
       });
     }
-    
-
   }
 
   handleTabClick = (e) => {
@@ -41,14 +38,7 @@ const App = observer(class App extends Component {
 
   render() {
     let { tab, loading } = this.state;
-    let timeToCsc, timeToPsc, cscName, pscName;
-    if (this.locationHandler.comprehensiveStrokeCenters.length > 0 && this.locationHandler.comprehensiveStrokeCenters.length > 0) {
-      timeToCsc = this.locationHandler.comprehensiveStrokeCenters[0].timeTo;
-      timeToPsc = this.locationHandler.primaryStrokeCenters[0].timeTo;
-      cscName = this.locationHandler.comprehensiveStrokeCenters[0].name + ' - ' + this.locationHandler.comprehensiveStrokeCenters[0].city;
-      pscName = this.locationHandler.primaryStrokeCenters[0].name + ' - ' + this.locationHandler.primaryStrokeCenters[0].city;
-    }
-    
+
     if (loading) {
       return ( <div>{fa.icon('spinner')}</div>);
     }
@@ -63,22 +53,20 @@ const App = observer(class App extends Component {
             <StrokeTreatment 
               type={ALTEPLASE} 
               title='IV Alteplase' 
-              rangeMessages={['PSC Door-to-Needle Time:', 'CSC Door-to-Needle Time:']} 
-              timeToCsc={timeToCsc}
-              timeToPsc={timeToPsc}
-              cscName={cscName}
-              pscName={pscName} />
+              rangeMessages={['PSC Door-to-Needle Time:', 'CSC Door-to-Needle Time:']}
+              secondaryTimeToMessage='time to tPA'
+              cscList={this.locationHandler.comprehensiveStrokeCenters}
+              pscList={this.locationHandler.primaryStrokeCenters} />
             : null }
         { tab === THROMBECTOMY ? 
             <StrokeTreatment 
               type={THROMBECTOMY} 
               title='Arterial Puncture'
-              rangeMessages={['PSC Door-in-Door-out Time:', 'CSC Door-to-Arterial Puncture Time:']} 
-              timeToCsc={timeToCsc}
-              timeToPsc={timeToPsc}
-              cscName={cscName}
-              pscName={pscName}
-              timeBetween={this.locationHandler.timeBetween} />
+              rangeMessages={['PSC Door-in-Door-out Time:', 'CSC Door-to-Arterial Puncture Time:']}
+              secondaryTimeToMessage='time to puncture'
+              timeBetween={this.locationHandler.timeBetween}
+              cscList={this.locationHandler.comprehensiveStrokeCenters}
+              pscList={this.locationHandler.primaryStrokeCenters} />
             : null }
       </div>
     );
