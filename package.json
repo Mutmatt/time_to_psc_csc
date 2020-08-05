@@ -9,7 +9,7 @@
     "cheerio": "^1.0.0-rc.3",
     "dotenv": "^8.2.0",
     "google-maps": "^4.2.3",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "mobx": "^5.15.4",
     "mobx-react": "^6.2.5",
     "react": "^16.13.1",
