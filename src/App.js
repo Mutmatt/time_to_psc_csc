@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import StrokeTreatment from './StrokeTreatment';
 import LocationHandler from './LocationHandler';
 import * as fa from '@fortawesome/fontawesome-svg-core';
-
+import { observer } from "mobx-react"
 
 import './App.css';
 
 export const THROMBECTOMY = 'Thrombectomy';
 export const ALTEPLASE ='IV Alteplase';
 
-class App extends Component {
+const App = observer(class App extends Component {
   constructor(props, context) {
     super(props, context);
     this.handleTabClick = this.handleTabClick.bind(this);
@@ -25,15 +25,10 @@ class App extends Component {
       this.locationHandler.downloadNewList().then(() => {
         this.setState({
           tab: ALTEPLASE,
-          cscs: this.locationHandler.comprehensiveStrokeCenters,
-          pscs: this.locationHandler.primaryStrokeCenters,
-          timeBetween: this.locationHandler.timeBetween,
           loading: false
         });
       });
     }
-    
-
   }
 
   handleTabClick = (e) => {
@@ -41,16 +36,9 @@ class App extends Component {
     this.setState({ tab: e.target.name });
   }
 
-  render() {    
-    let { tab, cscs, pscs, timeBetween, loading } = this.state;
-    let timeToCsc, timeToPsc, cscName, pscName;
-    if (cscs.length > 0 && pscs.length > 0) {
-      timeToCsc = cscs[0].timeTo;
-      timeToPsc = pscs[0].timeTo;
-      cscName = cscs[0].name + ' ' + cscs[0].city;
-      pscName = pscs[0].name + ' ' + pscs[0].city;
-    }
-    
+  render() {
+    let { tab, loading } = this.state;
+
     if (loading) {
       return ( <div>{fa.icon('spinner')}</div>);
     }
@@ -65,26 +53,24 @@ class App extends Component {
             <StrokeTreatment 
               type={ALTEPLASE} 
               title='IV Alteplase' 
-              rangeMessages={['PSC Door-to-Needle Time:', 'CSC Door-to-Needle Time:']} 
-              timeToCsc={timeToCsc}
-              timeToPsc={timeToPsc}
-              cscName={cscName}
-              pscName={pscName} />
+              rangeMessages={['PSC Door-to-Needle Time:', 'CSC Door-to-Needle Time:']}
+              secondaryTimeToMessage='time to tPA'
+              cscList={this.locationHandler.comprehensiveStrokeCenters}
+              pscList={this.locationHandler.primaryStrokeCenters} />
             : null }
         { tab === THROMBECTOMY ? 
             <StrokeTreatment 
               type={THROMBECTOMY} 
               title='Arterial Puncture'
-              rangeMessages={['PSC Door-in-Door-out Time:', 'CSC Door-to-Arterial Puncture Time:']} 
-              timeToCsc={timeToCsc}
-              timeToPsc={timeToPsc}
-              cscName={cscName}
-              pscName={pscName}
-              timeBetween={timeBetween} />
+              rangeMessages={['PSC Door-in-Door-out Time:', 'CSC Door-to-Arterial Puncture Time:']}
+              secondaryTimeToMessage='time to puncture'
+              timeBetween={this.locationHandler.timeBetween}
+              cscList={this.locationHandler.comprehensiveStrokeCenters}
+              pscList={this.locationHandler.primaryStrokeCenters} />
             : null }
       </div>
     );
   }
-}
+});
 
 export default App;
