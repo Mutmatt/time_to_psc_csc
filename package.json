@@ -9,7 +9,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.14.0",
     "@fortawesome/free-solid-svg-icons": "^5.14.0",
     "@fortawesome/react-fontawesome": "^0.1.11",
-    "axios": "^0.20.0",
+    "axios": "^0.21.1",
     "cheerio": "^1.0.0-rc.3",
     "dotenv": "^8.2.0",
     "google-maps": "^4.3.2",
