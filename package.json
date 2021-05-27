@@ -11,7 +11,7 @@
     "@fortawesome/react-fontawesome": "^0.1.14",
     "axios": "^0.21.1",
     "cheerio": "^1.0.0-rc.5",
-    "dotenv": "^8.2.0",
+    "dotenv": "^8.6.0",
     "google-maps": "^4.3.3",
     "lodash": "^4.17.21",
     "mobx": "^6.1.8",
